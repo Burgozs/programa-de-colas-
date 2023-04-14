@@ -1,0 +1,79 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Estructura de datos para jugadores de basket
+typedef struct {
+    int numerocamisa;
+    char nombre[30];
+    float sueldo;
+} Jugadorbasket;
+
+
+typedef struct nodo {
+    Jugadorbasket jugador;
+    struct nodo *siguiente;
+} Nodo;
+
+
+void crear_cola(Nodo **frente, Nodo **final) {
+    *frente = NULL;
+    *final = NULL;
+}
+
+void agregar_elemento(Nodo **frente, Nodo **final, Jugadorbasket jugador) {
+    Nodo *nuevo_nodo = (Nodo*) malloc(sizeof(Nodo));
+    nuevo_nodo->jugador = jugador;
+    nuevo_nodo->siguiente = NULL;
+    if (*frente == NULL) {
+        *frente = nuevo_nodo;
+    } else {
+        (*final)->siguiente = nuevo_nodo;
+    }
+    *final = nuevo_nodo;
+}
+
+void borrar_elemento(Nodo **frente, Nodo **final) {
+    if (*frente == NULL) {
+        printf("La cola esta vacia.\n");
+        return;
+    }
+    Nodo *nodo_borrado = *frente;
+    *frente = (*frente)->siguiente;
+    free(nodo_borrado);
+}
+
+void mostrar_cola(Nodo *frente) {
+    if (frente == NULL) {
+        printf("La cola esta vacia.\n");
+        return;
+    }
+    printf("Elementos en la cola:\n");
+    while (frente != NULL) {
+        printf("ID: %d, Nombre del jugador de basketball: %s, sueldo anual: %.2f\n", frente->jugador.numerocamisa, frente->jugador.nombre, frente->jugador.sueldo);
+        frente = frente->siguiente;
+    }
+}
+
+int main() {
+    Nodo *frente, *final;
+    crear_cola(&frente, &final);
+
+
+    Jugadorbasket jugador1 = {77, "Doncic", 162694290.08};
+    agregar_elemento(&frente, &final, jugador1);
+    Jugadorbasket jugador2 = {30, "Curry", 45800000.09};
+    agregar_elemento(&frente, &final, jugador2);
+    Jugadorbasket jugador3 = {1, "Booker", 379800.09};
+    agregar_elemento(&frente, &final, jugador3);
+
+    
+    mostrar_cola(frente);
+
+  
+    borrar_elemento(&frente, &final);
+
+    // Mostrar la cola actualizada
+    mostrar_cola(frente);
+
+    return 0;
+}
